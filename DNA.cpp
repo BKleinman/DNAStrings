@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <string>
 
 using namespace std;
 
@@ -11,9 +12,9 @@ int main(int argc, char** argv){
 
   ifstream inFS;
   ofstream outFS;
-  string dnaInput;
+  string dnaInput = "";
   string fileName = argv[1];
-  string sizes = ""
+  string sizes = "";
 
   int iterations = 0;
   int countA = 0;
@@ -32,9 +33,12 @@ int main(int argc, char** argv){
   while(!inFS.eof()){
     inFS >> dnaInput;
     if (!inFS.fail()){
-      dnaInput = toUpper(dnaInput);
+      string dnaUpper = "";
       for(int i = 0; i < dnaInput.size(); ++i){
-        char c = dnaInput[i];
+        dnaUpper += toupper(dnaInput[i]);
+      }
+      for(int i = 0; i < dnaUpper.size(); ++i){
+        char c = dnaUpper[i];
         if(c == 'A'){
           countA++;
         }else if(c == 'C'){
@@ -46,14 +50,10 @@ int main(int argc, char** argv){
         }
       }
       totalLength += dnaInput.size();
-      sizes.append(itoa(dnaInput.size()));
-
-
-
+      //sizes += itoa(dnaInput.size());
     }
     iterations++;
   }
-
   int meanLength = totalLength/iterations;
 
 
