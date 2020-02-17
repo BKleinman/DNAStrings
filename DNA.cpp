@@ -2,12 +2,13 @@
 #include <fstream>
 #include <string>
 #include <cmath>
+#include <random>
 
 using namespace std;
 
 int main(int argc, char** argv){
   if(argc < 2){
-    cout << "Invalid amount of command line arguments" << endl;
+    cout << "Invalid number of command line arguments" << endl;
     return 1;
   }
 
@@ -41,7 +42,7 @@ int main(int argc, char** argv){
   int totalLength = 0;
   int meanLength = 0;
 
-  float std = 0.0;
+  float stdev = 0.0;
   float var = 0.0;
   float varNumerator = 0.0;
   int length = 0;
@@ -108,6 +109,11 @@ int main(int argc, char** argv){
   }
   meanLength = totalLength/iterations;
 
+  int totalBigrams = countAA + countAC + countAT + countAG +
+  countCA + countCC + countCT + countCG +
+  countTA + countTC + countTT + countTG +
+  countGA + countGC + countGT + countGG;
+
   inFS2.open(fileName);
 
   while(!inFS2.eof()){
@@ -119,56 +125,85 @@ int main(int argc, char** argv){
   }
 
   var = varNumerator/iterations;
-  std = sqrt(var);
+  stdev = sqrt(var);
 
   float probabilityA = (float)countA/totalLength;
   float probabilityC = (float)countC/totalLength;
   float probabilityT = (float)countT/totalLength;
   float probabilityG = (float)countG/totalLength;
-  float probabilityAA = (float)countAA/totalLength;
-  float probabilityAC = (float)countAC/totalLength;
-  float probabilityAT = (float)countAT/totalLength;
-  float probabilityAG = (float)countAG/totalLength;
-  float probabilityCA = (float)countCA/totalLength;
-  float probabilityCC = (float)countCC/totalLength;
-  float probabilityCT = (float)countCT/totalLength;
-  float probabilityCG = (float)countCG/totalLength;
-  float probabilityTA = (float)countTA/totalLength;
-  float probabilityTC = (float)countTC/totalLength;
-  float probabilityTT = (float)countTT/totalLength;
-  float probabilityTG = (float)countTG/totalLength;
-  float probabilityGA = (float)countGA/totalLength;
-  float probabilityGC = (float)countGC/totalLength;
-  float probabilityGT = (float)countGT/totalLength;
-  float probabilityGG = (float)countGG/totalLength;
+  float probabilityAA = (float)countAA/totalBigrams;
+  float probabilityAC = (float)countAC/totalBigrams;
+  float probabilityAT = (float)countAT/totalBigrams;
+  float probabilityAG = (float)countAG/totalBigrams;
+  float probabilityCA = (float)countCA/totalBigrams;
+  float probabilityCC = (float)countCC/totalBigrams;
+  float probabilityCT = (float)countCT/totalBigrams;
+  float probabilityCG = (float)countCG/totalBigrams;
+  float probabilityTA = (float)countTA/totalBigrams;
+  float probabilityTC = (float)countTC/totalBigrams;
+  float probabilityTT = (float)countTT/totalBigrams;
+  float probabilityTG = (float)countTG/totalBigrams;
+  float probabilityGA = (float)countGA/totalBigrams;
+  float probabilityGC = (float)countGC/totalBigrams;
+  float probabilityGT = (float)countGT/totalBigrams;
+  float probabilityGG = (float)countGG/totalBigrams;
 
   outFS.open("BrandonKleinman.out", ios::app);
+  cout << "Printing Summary Statistics to 'BrandonKleinman.out'" << endl;
 
-  outFS << "Mean " << meanLength << endl;
-  outFS << "Variance " << var << endl;
-  outFS << "Standard Deviation " << std << endl;
-  outFS << "Probability of nucleotide 'A' " << probabilityA << endl;
-  outFS << "Probability of nucleotide 'C' " << probabilityC << endl;
-  outFS << "Probability of nucleotide 'T' " << probabilityT << endl;
-  outFS << "Probability of nucleotide 'G' " << probabilityG << endl;
-  outFS << "Probability of nucleotide bigram 'AA' " << probabilityAA << endl;
-  outFS << "Probability of nucleotide bigram 'AC' " << probabilityAC << endl;
-  outFS << "Probability of nucleotide bigram 'AT' " << probabilityAT << endl;
-  outFS << "Probability of nucleotide bigram 'AG' " << probabilityAG << endl;
-  outFS << "Probability of nucleotide bigram 'CA' " << probabilityCA << endl;
-  outFS << "Probability of nucleotide bigram 'CC' " << probabilityCC << endl;
-  outFS << "Probability of nucleotide bigram 'CT' " << probabilityCT << endl;
-  outFS << "Probability of nucleotide bigram 'CG' " << probabilityCG << endl;
-  outFS << "Probability of nucleotide bigram 'TA' " << probabilityTA << endl;
-  outFS << "Probability of nucleotide bigram 'TC' " << probabilityTC << endl;
-  outFS << "Probability of nucleotide bigram 'TT' " << probabilityTT << endl;
-  outFS << "Probability of nucleotide bigram 'TG' " << probabilityTG << endl;
-  outFS << "Probability of nucleotide bigram 'GA' " << probabilityGA << endl;
-  outFS << "Probability of nucleotide bigram 'GC' " << probabilityGC << endl;
-  outFS << "Probability of nucleotide bigram 'GT' " << probabilityGT << endl;
-  outFS << "Probability of nucleotide bigram 'GG' " << probabilityGG << endl;
+  outFS << "Name: Brandon Kleinman" << endl;
+  outFS << "Student ID: 2291703" << endl;
+  outFS << "Mean: " << meanLength << endl;
+  outFS << "Variance: " << var << endl;
+  outFS << "Standard Deviation: " << stdev << endl;
+  outFS << "Probability of nucleotide 'A' : " << probabilityA << endl;
+  outFS << "Probability of nucleotide 'C' : " << probabilityC << endl;
+  outFS << "Probability of nucleotide 'T' : " << probabilityT << endl;
+  outFS << "Probability of nucleotide 'G' : " << probabilityG << endl;
+  outFS << "Probability of nucleotide bigram 'AA' : " << probabilityAA << endl;
+  outFS << "Probability of nucleotide bigram 'AC' : " << probabilityAC << endl;
+  outFS << "Probability of nucleotide bigram 'AT' : " << probabilityAT << endl;
+  outFS << "Probability of nucleotide bigram 'AG' : " << probabilityAG << endl;
+  outFS << "Probability of nucleotide bigram 'CA' : " << probabilityCA << endl;
+  outFS << "Probability of nucleotide bigram 'CC' : " << probabilityCC << endl;
+  outFS << "Probability of nucleotide bigram 'CT' : " << probabilityCT << endl;
+  outFS << "Probability of nucleotide bigram 'CG' : " << probabilityCG << endl;
+  outFS << "Probability of nucleotide bigram 'TA' : " << probabilityTA << endl;
+  outFS << "Probability of nucleotide bigram 'TC' : " << probabilityTC << endl;
+  outFS << "Probability of nucleotide bigram 'TT' : " << probabilityTT << endl;
+  outFS << "Probability of nucleotide bigram 'TG' : " << probabilityTG << endl;
+  outFS << "Probability of nucleotide bigram 'GA' : " << probabilityGA << endl;
+  outFS << "Probability of nucleotide bigram 'GC' : " << probabilityGC << endl;
+  outFS << "Probability of nucleotide bigram 'GT' : " << probabilityGT << endl;
+  outFS << "Probability of nucleotide bigram 'GG' : " << probabilityGG << endl;
+
+  inFS.close();
+  inFS2.close();
 
 
+  //now we must generate the length of the string following the gaussian distribution
+  for(int i = 0; i < 1000; ++i){
+    float a = rand() / (float)1.0;
+    float b = rand() / (float)1.0;
+    cout << "A: " << a << " B: " << b << endl;
+    float c = sqrt((-2) * log(a)) * cos(M_PI * b);
+    float d = stdev * c + meanLength;
+    int e = round(d);
+    string newDNA = "";
+    for(int i = 0; i < e; ++i){
+      float chance = rand() / (float)1;
+      if(chance <= probabilityA){
+        newDNA += "A";
+      }else if(chance <= probabilityA + probabilityC){
+        newDNA += "C";
+      }else if(chance <= probabilityA + probabilityC + probabilityT){
+        newDNA += "T";
+      }else if(chance <= probabilityA + probabilityC + probabilityT + probabilityG){
+        newDNA += "G";
+      }
+    }
+    outFS << newDNA << endl;
+  }
 
   return 0;
 }
