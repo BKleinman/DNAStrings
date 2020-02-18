@@ -7,15 +7,18 @@
 using namespace std;
 
 int main(int argc, char** argv){
+  //checking for proper number of command line arguements
   if(argc < 2){
     cout << "Invalid number of command line arguments" << endl;
     return 1;
   }
 
+  //intitializing variables that will control the while loop and if statement below
   int loops = 0;
   bool passGo = true;
 
   while(passGo){
+    //initializing streams and strings that will help the streams for input and output
     ifstream inFS;
     ifstream inFS2;
     ofstream outFS;
@@ -28,20 +31,19 @@ int main(int argc, char** argv){
       cout << "Would you like to enter another DNA file for processing? Enter 'Y' for yes and 'N' for no." << endl;
       string check = "";
       cin >> check;
-      if(check == "N" || check == "n"){
+      if(check == "N" || check == "n"){ //break if user does not want to process another DNA sequence file
         passGo = false;
         break;
-      }else if(check == "Y" || check == "y"){
+      }else if(check == "Y" || check == "y"){ //prompts the user for the name of the DNA sequence file that is to be processed
         cout << "Enter the name of the file you would like to process?" << endl;
         cin >> fileName;
       }else{
-        cout << "Invalid input. Terminating Program." << endl;
-        passGo = false;
-        break;
+        cout << "Invalid input. Terminating program." << endl;
+        return 1;
       }
     }
 
-
+    //intitializing variables that I will use throughout the program
     int countA = 0;
     int countT = 0;
     int countC = 0;
@@ -63,6 +65,7 @@ int main(int argc, char** argv){
     int countGT = 0;
     int countGG = 0;
 
+    //initializing variables that relate to statistics
     int totalLength = 0;
     int meanLength = 0;
     float stdev = 0.0;
@@ -71,10 +74,12 @@ int main(int argc, char** argv){
     int length = 0;
     int iterations = 0;
 
+    //opening the file using the inFS stream
     cout << "Opening file " << fileName << endl;
     inFS.open(fileName);
-    cout << "Reading in DNA strings" << endl;
 
+    cout << "Reading in DNA strings" << endl;
+    //here we begin reading from the file
     while(!inFS.eof()){
       inFS >> dnaInput;
       if (!inFS.fail()){
@@ -83,6 +88,7 @@ int main(int argc, char** argv){
           dnaUpper += toupper(dnaInput[i]);
         }
         for(int i = 0; i < dnaUpper.size(); ++i){
+          //iterating through each DNA sequence to get the count of each nucleotide
           char c = dnaUpper[i];
           if(c == 'A'){
             countA++;
@@ -96,7 +102,7 @@ int main(int argc, char** argv){
         } // accounting for every possible nucleotide bigram
         if(dnaUpper.find("AA") != std::string::npos){
           countAA++;
-        }if(dnaUpper.find("AC") != std::string::npos){
+        }if(dnaUpper.find("AC") != std::string::npos){ //using if for all of the boolean expressions so that for example ACT will recognize bigram AC and CT
           countAC++;
         }if(dnaUpper.find("AT") != std::string::npos){
           countAT++;
@@ -131,7 +137,7 @@ int main(int argc, char** argv){
         iterations += 1;
       }
     }
-    meanLength = totalLength/iterations;
+    meanLength = totalLength/iterations; //calculating the mean length of the DNA sequences
 
     //adding all of the probabilities of the nucleotide bigrams so that I have a denominator to divide each individual probability by
     int totalBigrams = countAA + countAC + countAT + countAG +
@@ -139,19 +145,23 @@ int main(int argc, char** argv){
     countTA + countTC + countTT + countTG +
     countGA + countGC + countGT + countGG;
 
+    //opening a new file in stream to avoid complications of reading a file twice
     inFS2.open(fileName);
 
+    //reading through the file again to calculate variance and then derive standard deviation from variance
     while(!inFS2.eof()){
       inFS2 >> dnaInput;
       if (!inFS2.fail()){
         length = dnaInput.size();
-        varNumerator += pow((length - meanLength), 2);
+        varNumerator += pow((length - meanLength), 2); //calculating the numerator of the variance equation
       }
     }
 
+    //calcuating variance and standard deviation
     var = varNumerator/iterations;
     stdev = sqrt(var);
 
+    //making calculations for the probabilities of the occurence of each nucleotide and nucleotide bigram
     float probabilityA = (float)countA/totalLength;
     float probabilityC = (float)countC/totalLength;
     float probabilityT = (float)countT/totalLength;
@@ -173,9 +183,11 @@ int main(int argc, char** argv){
     float probabilityGT = (float)countGT/totalBigrams;
     float probabilityGG = (float)countGG/totalBigrams;
 
+    //opening the out stream which I use to append to the BrandonKleinman.out file
     outFS.open("BrandonKleinman.out", ios::app);
     cout << "Printing Summary Statistics to 'BrandonKleinman.out'" << endl;
 
+    //printing all of the summary statistics and probabilites using the outFS stream
     outFS << "Name: Brandon Kleinman" << endl;
     outFS << "Student ID: 2291703" << endl;
     outFS << "Mean: " << meanLength << endl;
@@ -202,6 +214,7 @@ int main(int argc, char** argv){
     outFS << "Probability of nucleotide bigram 'GT' : " << probabilityGT << endl;
     outFS << "Probability of nucleotide bigram 'GG' : " << probabilityGG << endl;
 
+    //closing the inFS and inFS2 streams
     inFS.close();
     inFS2.close();
 
@@ -214,15 +227,15 @@ int main(int argc, char** argv){
     float chance;
     //now we must generate the length of the string following the gaussian distribution
     for(int i = 0; i < 1000; ++i){
-      a = rand() / (float)RAND_MAX;
-      b = rand() / (float)RAND_MAX;
-      c = sqrt((-2) * log(a)) * cos(M_PI * b);
+      a = rand() / (float)RAND_MAX; //creating a float between 0 and 1
+      b = rand() / (float)RAND_MAX; // we divide by RAND_MAX so that the scale of rand() shrinks from [0, RAND_MAX) to [0,1)
+      c = sqrt((-2) * log(a)) * cos(M_PI * b); //creating a gaussian distribtion with mean 0 and variance 1, box muller transform
       d = stdev * c + meanLength;
-      e = round(d);
+      e = round(d); //rounding to get an integer
       newDNA = "";
       for(int i = 0; i < e; ++i){
         chance = rand() / (float)RAND_MAX;
-        if(chance <= probabilityA){
+        if(chance <= probabilityA){ //using the probabilities to create the appropriate distrubtion of the number of each nucleotide
           newDNA += "A";
         }else if(chance <= probabilityA + probabilityC){
           newDNA += "C";
@@ -234,7 +247,9 @@ int main(int argc, char** argv){
       }
       outFS << newDNA << endl;
     }
-    loops++;
+    loops++; //counting the number of loops to control whether the user wants to process another file
+
+    outFS.close(); //closing the out stream
   }
 
   return 0;
