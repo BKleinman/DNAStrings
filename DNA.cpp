@@ -36,6 +36,8 @@ int main(int argc, char** argv){
         cin >> fileName;
       }else{
         cout << "Invalid input. Terminating Program." << endl;
+        passGo = false;
+        break;
       }
     }
 
@@ -214,13 +216,9 @@ int main(int argc, char** argv){
     for(int i = 0; i < 1000; ++i){
       a = rand() / (float)RAND_MAX;
       b = rand() / (float)RAND_MAX;
-      //cout << "A: " << a << " B: " << b << endl;
-      c = sqrt((-2) * log(a)); //* cos(M_PI * b);
-      //cout << "C: " << c << endl;
+      c = sqrt((-2) * log(a)) * cos(M_PI * b);
       d = stdev * c + meanLength;
-      //cout << "D: " << d << endl;
       e = round(d);
-      //cout << "E: " << e << endl;
       newDNA = "";
       for(int i = 0; i < e; ++i){
         chance = rand() / (float)RAND_MAX;
