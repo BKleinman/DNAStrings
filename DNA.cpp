@@ -1,3 +1,14 @@
+/**
+Brandon Kleinman
+2291703
+kleinman@chapman.edu
+CPSC-350-02
+Assignment 1
+The purpose of this assignment is to read in a .txt file containing DNA strings, calculate the mean, length,
+and standard deviation of the length of all read DNA strings, calculate the probability of each nucleotide and
+nucleotide bigram, and then generate 1000 new DNA strings based on a gaussian distribution built by the summary Statistics
+of the file that we read and the nucleotide bigram probabilities
+*/
 #include <iostream>
 #include <fstream>
 #include <string>
