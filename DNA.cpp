@@ -13,7 +13,7 @@ of the file that we read and the nucleotide bigram probabilities
 #include <fstream>
 #include <string>
 #include <cmath>
-#include <random>
+#include <random> //pre processor directives
 
 using namespace std;
 
@@ -109,6 +109,8 @@ int main(int argc, char** argv){
             countT++;
           }else if(c == 'G'){
             countG++;
+          }else{
+            continue;
           }
         } // accounting for every possible nucleotide bigram
         if(dnaUpper.find("AA") != std::string::npos){
